@@ -1,5 +1,30 @@
+import { createClient } from "@supabase/supabase-js";
+import { PrismaClient } from "@prisma/client";
 import Fastify from "fastify";
 import cors from "@fastify/cors";
+
+// Create a single supabase client for interacting with your database
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_KEY
+);
+
+const prisma = new PrismaClient();
+
+async function main() {
+  const allQuestions = await prisma.questions.findMany();
+  console.log(allQuestions);
+}
+
+main()
+  .then(async () => {
+    await prisma.$disconnect();
+  })
+  .catch(async (e) => {
+    console.error(e);
+    await prisma.$disconnect();
+    process.exit(1);
+  });
 
 const fastify = Fastify({
   logger: true,
