@@ -2,14 +2,13 @@
   "name": "harry-potter-superfan-quiz-backend",
   "version": "1.0.0",
   "description": "",
-  "type": "module",
   "main": "index.js",
   "engines": {
     "node": "^18.15.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "build": "npx tsc",
+    "start": "npx tsc && node dist/index.js"
   },
   "keywords": [],
   "author": "",
@@ -17,6 +16,18 @@
   "dependencies": {
     "@fastify/cors": "^8.3.0",
     "@fastify/middie": "^8.3.0",
+    "@fastify/oauth2": "^7.4.0",
+    "@supabase/supabase-js": "^2.38.4",
     "fastify": "^4.21.0"
+  },
+  "devDependencies": {
+    "@prisma/client": "^5.5.2",
+    "@types/node": "^20.5.9",
+    "i": "^0.3.7",
+    "npm": "^10.2.1",
+    "prisma": "^5.5.2",
+    "supabase": "^1.106.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2"
   }
 }
