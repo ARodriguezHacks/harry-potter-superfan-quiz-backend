@@ -9,32 +9,21 @@ datasource db {
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
-model answers {
-  id            BigInt     @id @default(autoincrement())
-  title         String
-  level         Level
-  question_id   BigInt?
-  True_or_False Boolean    @default(false)
-  questions     questions? @relation(fields: [question_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+model Answer {
+  id          BigInt    @id(map: "answers_pkey") @default(autoincrement())
+  title       String
+  questionId  BigInt?
+  trueOrFalse Boolean   @default(false)
+  question    Question? @relation(fields: [questionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
-model questions {
-  id      BigInt    @id @default(autoincrement())
-  title   String    @unique
-  level   Level     @default(Easy)
-  answers answers[]
-}
-
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
-/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
-model users {
-  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  created_at DateTime @default(now()) @db.Timestamptz(6)
-  username   String   @default("")
-  email      String   @unique @default("")
-  password   String   @default("")
+model Question {
+  id     BigInt   @id(map: "questions_pkey") @default(autoincrement())
+  title  String   @unique(map: "questions_title_key")
+  level  Level    @default(Easy)
+  answers Answer[]
 }
 
 /// This enum is commented in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments

@@ -3,31 +3,25 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "engines": {
-    "node": "^18.15.0"
-  },
   "scripts": {
-    "build": "npx tsc",
-    "start": "npx tsc && node dist/index.js"
+    "build": "pnpm tsc",
+    "start": "pnpm exec tsc && node dist/index.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@fastify/cors": "^8.3.0",
+    "@fastify/cors": "^8.4.1",
     "@fastify/middie": "^8.3.0",
-    "@fastify/oauth2": "^7.4.0",
-    "@supabase/supabase-js": "^2.38.4",
-    "fastify": "^4.21.0"
+    "@fastify/oauth2": "^7.7.0",
+    "@prisma/client": "^5.6.0",
+    "fastify": "^4.24.3"
   },
   "devDependencies": {
-    "@prisma/client": "^5.5.2",
-    "@types/node": "^20.5.9",
+    "@types/node": "^20.10.1",
     "i": "^0.3.7",
-    "npm": "^10.2.1",
-    "prisma": "^5.5.2",
-    "supabase": "^1.106.1",
+    "prisma": "^5.6.0",
     "ts-node": "^10.9.1",
-    "typescript": "^5.2.2"
+    "typescript": "^5.3.2"
   }
 }
