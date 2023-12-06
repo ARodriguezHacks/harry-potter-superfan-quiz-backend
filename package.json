@@ -15,6 +15,7 @@
     "@fastify/middie": "^8.3.0",
     "@fastify/oauth2": "^7.7.0",
     "@prisma/client": "^5.6.0",
+    "@supabase/supabase-js": "^2.39.0",
     "fastify": "^4.24.3"
   },
   "devDependencies": {

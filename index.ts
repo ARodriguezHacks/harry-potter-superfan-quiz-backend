@@ -1,6 +1,13 @@
 import { PrismaClient } from "@prisma/client";
 import Fastify from "fastify";
 import cors from "@fastify/cors";
+import { createClient } from "@supabase/supabase-js";
+
+// Create a single supabase client for interacting with your database
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_KEY
+);
 
 const prisma = new PrismaClient();
 
@@ -43,13 +50,20 @@ fastify.get("/", async (req, res) => {
 fastify.post("/login", async (req, res) => {
   console.log(req.body);
   res.send({ message: "Hello?" });
-  // const { data, error } = await supabase.auth.signUp({
-  //   email: 'example@email.com',
-  //   password: 'example-password',
-  //   // options: {
-  //   //   emailRedirectTo: 'https//example.com/welcome';
-  //   // }
-  // })
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email: 'example@email.com',
+    password: 'example-password',
+  })
+});
+
+// Signing up a user
+fastify.post("/signup", async (req, res) => {
+  console.log(req.body);
+  res.send({ message: "Hello?" });
+  const { data, error } = await supabase.auth.signUp({
+    email: 'example@email.com',
+    password: 'example-password',
+  })
 });
 
 // fastify.route({
