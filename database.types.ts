@@ -42,36 +42,36 @@ export interface Database {
         }
         Relationships: []
       }
-      answers: {
+      Answer: {
         Row: {
           id: number
-          question_id: number | null
+          questionId: number | null
           title: string
-          True_or_False: boolean
+          trueOrFalse: boolean
         }
         Insert: {
           id?: number
-          question_id?: number | null
+          questionId?: number | null
           title: string
-          True_or_False?: boolean
+          trueOrFalse?: boolean
         }
         Update: {
           id?: number
-          question_id?: number | null
+          questionId?: number | null
           title?: string
-          True_or_False?: boolean
+          trueOrFalse?: boolean
         }
         Relationships: [
           {
-            foreignKeyName: "answers_question_id_fkey"
-            columns: ["question_id"]
+            foreignKeyName: "Answer_questionId_fkey"
+            columns: ["questionId"]
             isOneToOne: false
-            referencedRelation: "questions"
+            referencedRelation: "Question"
             referencedColumns: ["id"]
           }
         ]
       }
-      questions: {
+      Question: {
         Row: {
           id: number
           level: Database["public"]["Enums"]["Level"]
@@ -86,30 +86,6 @@ export interface Database {
           id?: number
           level?: Database["public"]["Enums"]["Level"]
           title?: string
-        }
-        Relationships: []
-      }
-      users: {
-        Row: {
-          created_at: string
-          email: string
-          id: string
-          password: string
-          username: string
-        }
-        Insert: {
-          created_at?: string
-          email?: string
-          id?: string
-          password?: string
-          username?: string
-        }
-        Update: {
-          created_at?: string
-          email?: string
-          id?: string
-          password?: string
-          username?: string
         }
         Relationships: []
       }
@@ -128,3 +104,83 @@ export interface Database {
     }
   }
 }
+
+export type Tables<
+  PublicTableNameOrOptions extends
+    | keyof (Database["public"]["Tables"] & Database["public"]["Views"])
+    | { schema: keyof Database },
+  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
+    ? keyof (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
+        Database[PublicTableNameOrOptions["schema"]]["Views"])
+    : never = never
+> = PublicTableNameOrOptions extends { schema: keyof Database }
+  ? (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
+      Database[PublicTableNameOrOptions["schema"]]["Views"])[TableName] extends {
+      Row: infer R
+    }
+    ? R
+    : never
+  : PublicTableNameOrOptions extends keyof (Database["public"]["Tables"] &
+      Database["public"]["Views"])
+  ? (Database["public"]["Tables"] &
+      Database["public"]["Views"])[PublicTableNameOrOptions] extends {
+      Row: infer R
+    }
+    ? R
+    : never
+  : never
+
+export type TablesInsert<
+  PublicTableNameOrOptions extends
+    | keyof Database["public"]["Tables"]
+    | { schema: keyof Database },
+  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
+    ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
+    : never = never
+> = PublicTableNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Insert: infer I
+    }
+    ? I
+    : never
+  : PublicTableNameOrOptions extends keyof Database["public"]["Tables"]
+  ? Database["public"]["Tables"][PublicTableNameOrOptions] extends {
+      Insert: infer I
+    }
+    ? I
+    : never
+  : never
+
+export type TablesUpdate<
+  PublicTableNameOrOptions extends
+    | keyof Database["public"]["Tables"]
+    | { schema: keyof Database },
+  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
+    ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
+    : never = never
+> = PublicTableNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Update: infer U
+    }
+    ? U
+    : never
+  : PublicTableNameOrOptions extends keyof Database["public"]["Tables"]
+  ? Database["public"]["Tables"][PublicTableNameOrOptions] extends {
+      Update: infer U
+    }
+    ? U
+    : never
+  : never
+
+export type Enums<
+  PublicEnumNameOrOptions extends
+    | keyof Database["public"]["Enums"]
+    | { schema: keyof Database },
+  EnumName extends PublicEnumNameOrOptions extends { schema: keyof Database }
+    ? keyof Database[PublicEnumNameOrOptions["schema"]]["Enums"]
+    : never = never
+> = PublicEnumNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
+  : PublicEnumNameOrOptions extends keyof Database["public"]["Enums"]
+  ? Database["public"]["Enums"][PublicEnumNameOrOptions]
+  : never
