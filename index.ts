@@ -1,10 +1,11 @@
 import { PrismaClient } from "@prisma/client";
-import Fastify from "fastify";
+import Fastify, { RequestGenericInterface } from "fastify";
 import cors from "@fastify/cors";
 import { createClient } from "@supabase/supabase-js";
+import { Database } from "./database.types";
 
 // Create a single supabase client for interacting with your database
-const supabase = createClient(
+const supabase = createClient<Database>(
   process.env.SUPABASE_URL,
   process.env.SUPABASE_KEY
 );
@@ -51,19 +52,29 @@ fastify.post("/login", async (req, res) => {
   console.log(req.body);
   res.send({ message: "Hello?" });
   const { data, error } = await supabase.auth.signInWithPassword({
-    email: 'example@email.com',
-    password: 'example-password',
-  })
+    email: "example@email.com",
+    password: "example-password",
+  });
 });
 
 // Signing up a user
-fastify.post("/signup", async (req, res) => {
-  console.log(req.body);
-  res.send({ message: "Hello?" });
+interface requestGeneric extends RequestGenericInterface {
+  Body: string;
+}
+fastify.post<requestGeneric>("/signup", async (req, res) => {
+  const userInput = JSON.parse(req.body)
   const { data, error } = await supabase.auth.signUp({
-    email: 'example@email.com',
-    password: 'example-password',
-  })
+    email: userInput.email,
+    password: userInput.password,
+    options: {
+      emailRedirectTo: "http://localhost:5173/homepage",
+    },
+  });
+  if (data) {
+    res.send(data);
+  } else {
+    console.error(error);
+  }
 });
 
 // fastify.route({
